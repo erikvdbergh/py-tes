@@ -35,7 +35,7 @@ class HTTPClient(object):
     def get_service_info(self):
         response = requests.get(
             "%s/v1/tasks/service-info" % (self.url),
-            timeout=self.timeout
+            timeout=self.timeout,
             headers=self.headers
         )
         raise_for_status(response)
@@ -61,7 +61,7 @@ class HTTPClient(object):
         response = requests.get(
             "%s/v1/tasks/%s" % (self.url, req.id),
             params=payload,
-            timeout=self.timeout
+            timeout=self.timeout,
             headers=self.headers
         )
         raise_for_status(response)
@@ -71,7 +71,7 @@ class HTTPClient(object):
         req = CancelTaskRequest(task_id)
         response = requests.post(
             "%s/v1/tasks/%s:cancel" % (self.url, req.id),
-            timeout=self.timeout
+            timeout=self.timeout,
             headers=self.headers
         )
         raise_for_status(response)
@@ -90,7 +90,7 @@ class HTTPClient(object):
         response = requests.get(
             "%s/v1/tasks" % (self.url),
             params=msg,
-            timeout=self.timeout
+            timeout=self.timeout,
             headers=self.headers
         )
         raise_for_status(response)
