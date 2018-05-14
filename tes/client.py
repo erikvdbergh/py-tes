@@ -21,6 +21,7 @@ def process_url(value):
 class HTTPClient(object):
     url = attrib(convert=process_url)
     timeout = attrib(default=10, validator=instance_of(int))
+    headers = attrib(default={'Content-Type': 'application/json'})
 
     @url.validator
     def __check_url(self, attribute, value):
@@ -35,6 +36,7 @@ class HTTPClient(object):
         response = requests.get(
             "%s/v1/tasks/service-info" % (self.url),
             timeout=self.timeout
+            headers=self.headers
         )
         raise_for_status(response)
         return unmarshal(response.json(), ServiceInfo)
@@ -47,7 +49,7 @@ class HTTPClient(object):
         response = requests.post(
             "%s/v1/tasks" % (self.url),
             data=msg,
-            headers={'Content-Type': 'application/json'},
+            headers=self.headers,
             timeout=self.timeout
         )
         raise_for_status(response)
@@ -60,6 +62,7 @@ class HTTPClient(object):
             "%s/v1/tasks/%s" % (self.url, req.id),
             params=payload,
             timeout=self.timeout
+            headers=self.headers
         )
         raise_for_status(response)
         return unmarshal(response.json(), Task)
@@ -69,6 +72,7 @@ class HTTPClient(object):
         response = requests.post(
             "%s/v1/tasks/%s:cancel" % (self.url, req.id),
             timeout=self.timeout
+            headers=self.headers
         )
         raise_for_status(response)
         return
@@ -87,6 +91,7 @@ class HTTPClient(object):
             "%s/v1/tasks" % (self.url),
             params=msg,
             timeout=self.timeout
+            headers=self.headers
         )
         raise_for_status(response)
         return unmarshal(response.json(), ListTasksResponse)
